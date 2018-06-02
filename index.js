@@ -6,7 +6,7 @@ const deviceState = require('./lib/core/deviceState/index');
 const event = require('./lib/core/event/index');
 
 module.exports = function(params) {
-    console.log(params);
+
     // validate parameters sent to this module, and crash if they are not present
     if(!params.MACHINE_ID || !params.MQTT_URL || !params.MQTT_USERNAME || !params.MQTT_PASSWORD || !params.MODULE_SLUG) {
         return new Error('Invalid parameters. You need to provide: MACHINE_ID, MQTT_URL, MQTT_USERNAME, MQTT_PASSWORD and MODULE_SLUG');
