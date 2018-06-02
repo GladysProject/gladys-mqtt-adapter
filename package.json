@@ -1,0 +1,16 @@
+{
+  "name": "gladys-mqtt-adapter",
+  "version": "0.1.0",
+  "description": "Gladys NPM module that helps developer build a remote Gladys module connected threw MQTT",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "gladys",
+    "mqtt",
+    "adapter"
+  ],
+  "author": "Pierre-Gilles Leymarie",
+  "license": "CC-BY-NC-SA-3.0"
+}
