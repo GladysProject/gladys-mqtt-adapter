@@ -31,6 +31,7 @@ module.exports = function(params) {
         client.subscribe(`${prefixOfTopicToListen}#`);
 
         console.log(`Connected, subscribed to ${prefixOfTopicToListen}#`);
+        eventEmitter.emit('connect');
     });
 
     // On error while connecting to MQTT broker
