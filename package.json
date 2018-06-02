@@ -4,7 +4,7 @@
   "description": "Gladys NPM module that helps developer build a remote Gladys module connected threw MQTT",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha --exit"
   },
   "keywords": [
     "gladys",
@@ -17,6 +17,8 @@
     "mqtt": "^2.18.0"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "dotenv": "^5.0.1",
+    "mocha": "^5.2.0",
+    "should": "^13.2.1"
   }
 }
