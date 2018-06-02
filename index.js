@@ -4,6 +4,7 @@ const handler = require('./lib/handler');
 const device = require('./lib/core/device/index');
 const deviceState = require('./lib/core/deviceState/index');
 const event = require('./lib/core/event/index');
+const param = require('./lib/core/param/index');
 
 module.exports = function(params) {
 
@@ -20,12 +21,14 @@ module.exports = function(params) {
         username: params.MQTT_USERNAME,
         password: params.MQTT_PASSWORD
     });
+
+    var prefixOfTopicToListen = `gladys/machine/${params.MACHINE_ID}/module/${params.MODULE_SLUG}/`;
     
     // when the client is connected to MQTT
     client.on('connect', function () {
 
         // subscribe to all messages for this module in this machine
-        client.subscribe(`gladys/machine/${params.MACHINE_ID}/module/${params.MODULE_SLUG}/#`);
+        client.subscribe(`${prefixOfTopicToListen}/#`);
     });
 
     // On error while connecting to MQTT broker
@@ -36,13 +39,15 @@ module.exports = function(params) {
     // when a message is received on any topic we subscribed too
     client.on('message', function (topic, message) {
         console.log(`MQTT : New message received in topic ${topic}`);
-        handler(client, topic, message.toString());
+        var endOfTopicString = topic.substring(prefixOfTopicToListen.length);
+        handler(eventEmitter, client, endOfTopicString, message.toString());
     });
 
     // add function of the API of the module
     eventEmitter.device = device(client)
     eventEmitter.deviceState = deviceState(client);
     eventEmitter.event = event(client);
+    eventEmitter.param = param(client);
 
     return eventEmitter;
 };

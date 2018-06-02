@@ -28,9 +28,11 @@ describe('index.js', function(){
             gladysMqttAdapter.should.have.property('device');
             gladysMqttAdapter.should.have.property('deviceState');
             gladysMqttAdapter.should.have.property('event');
+            gladysMqttAdapter.should.have.property('param');
             should.equal(typeof gladysMqttAdapter.device.create, 'function');
             should.equal(typeof gladysMqttAdapter.deviceState.create, 'function');
             should.equal(typeof gladysMqttAdapter.event.create, 'function');
+            should.equal(typeof gladysMqttAdapter.param.getValues, 'function');
         });
     });
 });
