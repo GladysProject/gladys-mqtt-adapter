@@ -1,10 +1,13 @@
 const mqtt = require('mqtt');
 const events = require('events');
 const handler = require('./lib/handler');
+const sendHeartbeat = require('./lib/sendHeartbeat');
 const device = require('./lib/core/device/index');
 const deviceState = require('./lib/core/deviceState/index');
 const event = require('./lib/core/event/index');
 const param = require('./lib/core/param/index');
+
+const HEARTBEAT_INTERVAL = 60*1000;
 
 module.exports = function(params) {
 
@@ -29,9 +32,19 @@ module.exports = function(params) {
 
         // subscribe to all messages for this module in this machine
         client.subscribe(`${prefixOfTopicToListen}#`);
+        
+        // tell the user the module has successfully connected to MQTT
+        eventEmitter.emit('connect');
+
+        // send a first heartbeat at startup
+        sendHeartbeat(client, params.MACHINE_ID, params.MODULE_SLUG);
+
+        // send heartbeat frequently to tell Gladys that this module is still alive
+        setInterval(function() {
+            sendHeartbeat(client, params.MACHINE_ID, params.MODULE_SLUG);
+        }, HEARTBEAT_INTERVAL);
 
         console.log(`Connected, subscribed to ${prefixOfTopicToListen}#`);
-        eventEmitter.emit('connect');
     });
 
     // On error while connecting to MQTT broker
@@ -50,7 +63,7 @@ module.exports = function(params) {
     eventEmitter.device = device(client)
     eventEmitter.deviceState = deviceState(client);
     eventEmitter.event = event(client);
-    eventEmitter.param = param(client);
+    eventEmitter.param = param(client, params);
 
     return eventEmitter;
 };
