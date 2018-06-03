@@ -6,6 +6,7 @@ const device = require('./lib/core/device/index');
 const deviceState = require('./lib/core/deviceState/index');
 const event = require('./lib/core/event/index');
 const param = require('./lib/core/param/index');
+const notification = require('./lib/core/notification/index');
 
 const HEARTBEAT_INTERVAL = 60*1000;
 
@@ -64,6 +65,7 @@ module.exports = function(params) {
     eventEmitter.deviceState = deviceState(client);
     eventEmitter.event = event(client);
     eventEmitter.param = param(client, params);
+    eventEmitter.notification = notification(client);
 
     return eventEmitter;
 };
