@@ -56,9 +56,12 @@ module.exports = function(params) {
 
     // when a message is received on any topic we subscribed too
     client.on('message', function (topic, message) {
-        console.log(`MQTT : New message received in topic ${topic}`);
-        var endOfTopicString = topic.substring(prefixOfTopicToListen.length);
-        handler(eventEmitter, client, endOfTopicString, message.toString());
+        // Exclusion of all topics that respond to Gladys
+        if(topic.includes('notify/answer/') === false){
+            console.log(`MQTT : New message received in topic ${topic}`);
+            var endOfTopicString = topic.substring(prefixOfTopicToListen.length);
+            handler(eventEmitter, client, endOfTopicString, message.toString());
+        }
     });
 
     // add function of the API of the module
