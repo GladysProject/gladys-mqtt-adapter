@@ -7,6 +7,7 @@ const deviceState = require('./lib/core/deviceState/index');
 const event = require('./lib/core/event/index');
 const param = require('./lib/core/param/index');
 const notification = require('./lib/core/notification/index');
+const answer = require('./lib/core/answer/index');
 
 const HEARTBEAT_INTERVAL = 60*1000;
 
@@ -55,9 +56,12 @@ module.exports = function(params) {
 
     // when a message is received on any topic we subscribed too
     client.on('message', function (topic, message) {
-        console.log(`MQTT : New message received in topic ${topic}`);
-        var endOfTopicString = topic.substring(prefixOfTopicToListen.length);
-        handler(eventEmitter, client, endOfTopicString, message.toString());
+        // Exclusion of all topics that respond to Gladys
+        if(topic.includes('notify/answer/') === false){
+            console.log(`MQTT : New message received in topic ${topic}`);
+            var endOfTopicString = topic.substring(prefixOfTopicToListen.length);
+            handler(eventEmitter, client, endOfTopicString, message.toString());
+        }
     });
 
     // add function of the API of the module
@@ -66,6 +70,7 @@ module.exports = function(params) {
     eventEmitter.event = event(client);
     eventEmitter.param = param(client, params);
     eventEmitter.notification = notification(client);
+    eventEmitter.answer = answer(client)
 
     return eventEmitter;
 };
